@@ -30,6 +30,20 @@
        </ul>
      </div>
    </div>
+<!--    地址管理-->
+    <div style="height: 300px" id="address">
+      <h3 style="display: inline-block">其他信息</h3>
+      <el-descriptions class="margin-top" title="默认收货地址" :column="3"  style="padding: 10px">
+        <template slot="extra">
+          <el-button type="primary" size="small" @click="showAddress">操作</el-button>
+        </template>
+        <el-descriptions-item label="收货人">kooriookami</el-descriptions-item>
+        <el-descriptions-item label="手机号">18100000000</el-descriptions-item>
+        <el-descriptions-item label="邮编">苏州市</el-descriptions-item>
+
+        <el-descriptions-item label="地址">江苏省/苏州市/吴中区</el-descriptions-item>
+      </el-descriptions>
+    </div>
   </el-drawer>
 
 </template>
@@ -41,10 +55,10 @@ import UploadHead from "@/components/user/UploadHead";
 
 export default {
   name: "UserDrawer",
-  components: {UploadHead},
+  components: { UploadHead},
   data() {
     return {
-      drawer: false,
+      drawer: true,
       direction: 'rtl',
       isUpName:false,
 
@@ -59,7 +73,7 @@ export default {
           .catch(() => {});
     },
     upName(){
-      this.isUpName=!this.isUpNam
+      this.isUpName=!this.isUpName
       this.$refs['nameInput'].value=this.user.uname
       this.$nextTick(function (){
         this.$refs['nameInput'].focus()
@@ -97,6 +111,9 @@ export default {
     showEmailForm(){
       this.$bus.$emit('showUpdateEmailForm')
     },
+    showAddress(){
+ this.$bus.$emit("showUserAddress")
+    },
     ...mapMutations('userAbout',['setUser']),
 
   },
@@ -127,12 +144,12 @@ export default {
 </script>
 
 <style scoped>
-#userInfo{
+#userInfo,#address{
   border: 1px solid #3b2e74;
   width: 95%;
   margin: 2.5%;
 }
-#userInfo h3{
+h3{
   margin-left: 15px;
   color: #3b2e74;
 }

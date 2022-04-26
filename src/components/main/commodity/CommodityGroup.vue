@@ -19,9 +19,6 @@
 export default {
   name: "CommodityGroup",
   props:["title","url","count","ty"],
-  mounted() {
-    console.log("type:",this.ty)
-  }
 
 }
 </script>

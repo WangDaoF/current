@@ -21,7 +21,7 @@ export default {
       if (el.target.files[0].type.indexOf('image') === -1) { //如果不是图片格式
         console.log('请选择图片文件');
       } else {
-        const uid = this.user.uId; //后台需要的参数
+        const uid = this.user.uid; //后台需要的参数
         const formData = new FormData();  // 创建一个formdata对象
         formData.append('photo', el.target.files[0]);
         formData.append('uId', uid);
@@ -57,12 +57,7 @@ export default {
   width: 100%;
   height: 100%;
 }
-  .avatar-uploader n {
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
+
   .avatar-uploader .el-upload:hover {
     border-color: #409EFF;
   }

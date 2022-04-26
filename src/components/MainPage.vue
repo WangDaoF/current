@@ -20,7 +20,7 @@
     </el-footer>
     <UpdateEmail></UpdateEmail>
     <UpdatePhone></UpdatePhone>
-
+    <UserAddress/>
   </el-container>
 </template>
 
@@ -30,9 +30,11 @@ import SearchBox from "../components/main/SearchBox";
 import FooterShow from "@/components/main/FooterShow";
 import UpdateEmail from "@/components/user/UpdateEmail";
 import UpdatePhone from "@/components/user/UpdatePhone";
+import UserAddress from "@/components/user/UserAddress";
 export default {
   name: "MainPage",
   components: {
+    UserAddress,
     UpdatePhone,
     UpdateEmail,
     FooterShow,
