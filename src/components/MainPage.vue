@@ -18,9 +18,13 @@
     <el-footer>
         <FooterShow></FooterShow>
     </el-footer>
+<!--    弹出框-->
     <UpdateEmail></UpdateEmail>
     <UpdatePhone></UpdatePhone>
     <UserAddress/>
+    <CommodityDisplay></CommodityDisplay>
+    <ShippingPage></ShippingPage>
+    <OrderPage></OrderPage>
   </el-container>
 </template>
 
@@ -31,9 +35,15 @@ import FooterShow from "@/components/main/FooterShow";
 import UpdateEmail from "@/components/user/UpdateEmail";
 import UpdatePhone from "@/components/user/UpdatePhone";
 import UserAddress from "@/components/user/UserAddress";
+import CommodityDisplay from "@/components/commodity/CommodityDisplay";
+import ShippingPage from "@/components/user/ShippingPage";
+import OrderPage from "@/components/order/OrderPage";
 export default {
   name: "MainPage",
   components: {
+    OrderPage,
+    ShippingPage,
+    CommodityDisplay,
     UserAddress,
     UpdatePhone,
     UpdateEmail,

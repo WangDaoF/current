@@ -17,7 +17,7 @@
             </el-dropdown-menu>
           </el-dropdown>
         </li>
-          <li >
+          <li @click="ShowShopping" >
               <i class="el-icon-shopping-cart-2"></i> 购物车
           </li>
           <li>
@@ -80,6 +80,9 @@ export default {
   methods:{
     show(){
        this.$bus.$emit("showSign")
+    },
+    ShowShopping(){
+       this.$bus.$emit("ShowShippPage")
     }
   },
   computed:{

@@ -9,6 +9,7 @@
 
 import axios from "axios";
 import {mapMutations, mapState} from "vuex";
+import {re_address} from "@/config";
 
 export default {
   name: "UploadHead",
@@ -30,7 +31,7 @@ export default {
             'Content-Type': 'multipart/form-data'
           }
         }
-        axios.post('http://localhost:8081/uploadHead',formData,config).then(res=>{
+        axios.post(re_address+'/uploadHead',formData,config).then(res=>{
           console.log(res.data)
           this.setUser(res.data)
         })

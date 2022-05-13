@@ -9,10 +9,10 @@ const userAbout = {
     },
     mutations: {
         isLogoin(state) {
-            console.log("mutations被调用了")
             state.isLogin=!state.isLogin
         },
         setUser(state,val){
+            console.log("我被修改了")
             state.isLogin=true
             state.user=val
         }
@@ -21,11 +21,37 @@ const userAbout = {
         isLogin: false,
         user:{
             uName:'你好',
-            uHeadUrl:''
+            uHeadUrl:'',
+            shippAddress:{
+                consigneeName:"",
+                postalCode: "",
+                shippAddress:{
+                    consigneeName:"",
+                    phone:"",
+                    postalCode:"",
+                    province:"",
+                    city:"",
+                    county:"",
+                    detached:"",
+                }
+            }
         },
         notUser:{
             uname:'你好',
-            uheadUrl:''
+            uheadUrl:'',
+            shippAddress:{
+                consigneeName:"",
+                postalCode: "",
+                shippAddress:{
+                    consigneeName:"",
+                    phone:"",
+                    postalCode:"",
+                    province:"",
+                    city:"",
+                    county:"",
+                    detached:"",
+                }
+            }
         }
     },
     getters: {

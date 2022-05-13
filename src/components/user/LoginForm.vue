@@ -56,6 +56,7 @@
 <script>
 import axios from 'axios'
 import {mapMutations} from "vuex";
+import {re_address} from "@/config";
 export default {
   components: {},
   props: ["typeform"],
@@ -159,15 +160,17 @@ export default {
             'Content-Type': 'multipart/form-data'
           }
         }
-        axios.post("http://localhost:8081/login",fromData,config).then(res=>{
+        axios.post(re_address+"/login",fromData,config).then(res=>{
           console.log('登录用户请求返回数据',res.data)
           if(res.data.uname==='你好'){
             this.failed();
             return
           }
+          if(!res.data.shippAddress){
+            res.data.shippAddress=this.user.shippAddress
+          }
           this.setUser(res.data)
             this.success()
-
            this.$bus.$emit("showSignForm",this.typeform)
         })
         return;
@@ -193,9 +196,12 @@ export default {
         axios.post("http://localhost:8081/user",fromData,config).then(
             res=>{
               console.log('注冊用戶请求==>返回数据:',res.data)
-              if(res.data.uName==="你好"){
+              if(res.data.uname==="你好"){
                 this.repetition()
                 return
+              }
+              if(!res.data.shippingAddress){
+                res.data.shippingAddress=this.user.shippAddress
               }
               this.setUser(res.data)
               this.successSign()

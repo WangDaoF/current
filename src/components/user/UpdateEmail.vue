@@ -26,6 +26,7 @@
 <script>
 import axios from "axios";
 import {mapMutations, mapState} from "vuex";
+import {re_address} from "@/config";
 
 export default {
   name: "UpdateEmail",
@@ -75,7 +76,7 @@ export default {
             'Content-Type': 'multipart/form-data'
           }
         }
-        axios.put("http://localhost:8081/user",fromData,config).then(
+        axios.put(re_address+"/user",fromData,config).then(
             res=>{
               console.log('修改用戶请求==>返回数据:',res.data)
               if(!res.data){

@@ -1,34 +1,31 @@
 <template>
 <div id="rootg">
   <div id="title">{{title}}<span id="label" ><img :src="url" alt=""></span></div>
-        <div class="col" v-for="i in count" :key="i">
-          <div class="imgdiv">
-            <img src="../../../assets/images/pic_001.jpg" alt="">
-          </div>
-          <span class="title">title</span><br>
-          <span v-show="!ty" class="describe">描述...</span>
-          <span v-show="ty" class="pic">价格:</span>
+        <div class="col" v-for="(d,index) in data" :key="index" @click="show(d.ccode)">
+          <CommodityDiv :data="d"></CommodityDiv>
         </div>
-
     </div>
 
 
 </template>
 
 <script>
+import CommodityDiv from "@/components/main/commodity/CommodityDiv";
 export default {
   name: "CommodityGroup",
-  props:["title","url","count","ty"],
+  components: {CommodityDiv},
+  props:["title","url","data","ty"],
+  methods:{
+    show(ccode){
+       this.$bus.$emit('showCommodityDisplay',ccode)
+    }
+  }
 
 }
 </script>
 
 <style scoped>
-.pic{
-  color: red;
-  display: inline-block;
-  margin:10px 0px;
-}
+
 #rootg{
   width: 100%;
   height: auto ;
@@ -51,7 +48,7 @@ export default {
 .col{
   display: inline-block;
   width: 230px;
-  height: 300px;
+  height: auto;
   margin-left: 16px;
   margin-top: 10px;
 }
@@ -62,7 +59,7 @@ export default {
   color: #755be7;
 }
 .col .title{
-  font-size: 20px;
+  font-size: 18px;
 }
 .col .describe{
   font-size: 13px;
@@ -72,14 +69,7 @@ img{
   height: 100%;
 
 }
-.imgdiv{
-  width: 230px;
-  height: 230px;
-  overflow: hidden;
-  border-radius: 12px;
-  display: inline-block;
 
-}
 .col:hover {
   boxShadow: 0px 0px 5px #4fc583
 }

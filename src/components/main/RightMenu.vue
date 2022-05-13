@@ -24,19 +24,19 @@
             name="animate__animated animate__bounce"
             enter-active-class="animate__fadeIn">
           <div  :key="1" v-show="isLogin" id="showState">
-            <div>
-              <div>0</div>
+            <div @click="showShippCart">
+              <div>{{ CartCount }}</div>
               <span>购物车</span>
             </div>
-            <div>
+            <div @click="showOrderPage">
               <div>0</div>
               <span>待收货</span>
             </div>
-            <div>
+            <div @click="showOrderPage">
               <div>0</div>
               <span>代发货</span>
             </div>
-            <div>
+            <div @click="showOrderPage">
               <div>0</div>
               <span>待付款</span>
             </div>
@@ -88,12 +88,19 @@
 import SignInForm from "@/components/user/SignInForm";
 import 'animate.css'
 import {mapState} from "vuex";
+import {re_address} from "@/config";
 export default {
   name: "RightMenu",
   components: {SignInForm},
   methods:{
     showSignForm(typeform){
       this.$bus.$emit('showSignForm',typeform)
+    },
+    showOrderPage(){
+       this.$bus.$emit("ShowOrderPage")
+    },
+    showShippCart(){
+      this.$bus.$emit("ShowShippPage")
     }
   },
   computed:{
@@ -102,10 +109,24 @@ export default {
       if(!this.user.uheadUrl){
         return 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
       }
-      var url="http://localhost:8081/"+this.user.uheadUrl;
+      var url=re_address+"/getUserAvatar/"+this.user.uid+"/"+this.user.uheadUrl;
+      window.localStorage.setItem('store', JSON.stringify(this.$store.state))
       return url;
+    },
+  },
+  mounted() {
+    this.$bus.$on("CartCount",()=>{
+      this.$axios("/CartCount/"+this.user.uid).then(res=>{
+        this.CartCount= res.data.data.CartCount
+      })
+    })
+     this.$bus.$emit("CartCount")
+  },
+  data() {
+    return {
+      CartCount: 0
     }
-  }
+  },
 }
 </script>
 
@@ -113,6 +134,7 @@ export default {
 #foot{
   height: 80px;
   margin-top: 60px;
+  margin-left: 10px;
 }
 #showState{
   font-size: 14px;

@@ -37,11 +37,16 @@
         <template slot="extra">
           <el-button type="primary" size="small" @click="showAddress">操作</el-button>
         </template>
-        <el-descriptions-item label="收货人">kooriookami</el-descriptions-item>
-        <el-descriptions-item label="手机号">18100000000</el-descriptions-item>
-        <el-descriptions-item label="邮编">苏州市</el-descriptions-item>
+        <el-descriptions-item label="收货人">{{user.shippAddress.consigneeName}}</el-descriptions-item>
+        <el-descriptions-item label="手机号">{{user.shippAddress.phone}}</el-descriptions-item>
+        <el-descriptions-item label="邮编">{{user.shippAddress.postalCode}}</el-descriptions-item>
 
-        <el-descriptions-item label="地址">江苏省/苏州市/吴中区</el-descriptions-item>
+        <el-descriptions-item label="地址">
+          {{user.shippAddress.province}}
+          /{{user.shippAddress.city}}
+          /{{user.shippAddress.county}}
+          /{{user.shippAddress.county}}
+        </el-descriptions-item>
       </el-descriptions>
     </div>
   </el-drawer>
@@ -52,13 +57,14 @@
 import {mapMutations, mapState} from "vuex";
 import axios from "axios";
 import UploadHead from "@/components/user/UploadHead";
+import {re_address} from "@/config";
 
 export default {
   name: "UserDrawer",
   components: { UploadHead},
   data() {
     return {
-      drawer: true,
+      drawer: false,
       direction: 'rtl',
       isUpName:false,
 
@@ -94,7 +100,7 @@ export default {
           'Content-Type': 'multipart/form-data'
         }
       }
-      axios.put("http://localhost:8081/user",fromData,config).then(
+      axios.put(re_address+"/user",fromData,config).then(
           res=>{
             console.log('修改用戶请求==>返回数据:',res.data)
             this.setUser(res.data)
@@ -129,7 +135,7 @@ export default {
       if(!this.user.uheadUrl){
         return 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
       }
-      var url="http://localhost:8081/"+this.user.uheadUrl;
+      var url=re_address+"/getUserAvatar/"+this.user.uid+"/"+this.user.uheadUrl;
       return url;
     }
   },
@@ -137,7 +143,6 @@ export default {
     this.$bus.$on("openUserDrawer",()=>{
       this.drawer=true
     })
-    console.log(this.headUrl)
   },
 
 }

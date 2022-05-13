@@ -1,36 +1,39 @@
 <template>
   <div>
-    <el-form ref="shipping_address " :model="address" :rules="rules" size="medium" label-width="100px">
-      <el-form-item label="地址信息" prop="address">
-        <el-cascader v-model="address.address" :options="addressOptions" :props="addressProps"
-                     :style="{width: '100%'}" placeholder="请选择地址信息" clearable ></el-cascader>
-      </el-form-item>
-      <el-form-item label="详细地址" prop="detailed">
-        <el-input v-model="address.detailed" type="textarea" placeholder="请输入详细地址"
-                  :autosize="{minRows: 4, maxRows: 4}" :style="{width: '100%'}" ></el-input>
-      </el-form-item>
-      <el-form-item label="邮政编码" prop="postal_code">
-        <el-input v-model="address.postal_code" placeholder="请输入邮政编码" clearable :style="{width: '100%'}" >
-        </el-input>
-      </el-form-item>
-      <el-form-item label="收货人姓名" prop="name">
-        <el-input v-model="address.name" placeholder="请输入收货人姓名" clearable :style="{width: '100%'}"></el-input>
-      </el-form-item>
-      <el-form-item label="手机号码" prop="phone">
-        <el-input v-model="address.phone" placeholder="请输入手机号码" clearable :style="{width: '100%'}"></el-input>
-      </el-form-item>
-      <el-form-item size="large">
-        <el-button type="primary" @click="submitForm">保存</el-button>
-        <el-button @click="cut">取消</el-button>
-      </el-form-item>
-    </el-form>
+          <el-form ref="shipping_address " :model="address" :rules="rules" size="medium" label-width="100px" >
+            <el-form-item label="地址信息" prop="address">
+              <el-cascader v-model="address.address" :options="addressOptions" :props="addressProps"
+                           :style="{width: '100%'}" placeholder="请选择地址信息" clearable ></el-cascader>
+            </el-form-item>
+            <el-form-item label="详细地址" prop="detailed" >
+              <el-input v-model="address.detailed" type="textarea" placeholder="请输入详细地址"
+                        :autosize="{minRows: 4, maxRows: 4}" :style="{width: '100%'}" ></el-input>
+            </el-form-item>
+            <el-form-item label="邮政编码" prop="postal_code">
+              <el-input v-model="address.postal_code" placeholder="请输入邮政编码" clearable :style="{width: '100%'}" >
+              </el-input>
+            </el-form-item>
+            <el-form-item label="收货人姓名" prop="name">
+              <el-input v-model="address.name" placeholder="请输入收货人姓名" clearable :style="{width: '100%'}"></el-input>
+            </el-form-item>
+            <el-form-item label="手机号码" prop="phone">
+              <el-input v-model="address.phone" placeholder="请输入手机号码" clearable :style="{width: '100%'}"></el-input>
+            </el-form-item>
+            <el-form-item size="large">
+              <el-button type="primary" @click="submitForm">保存</el-button>
+              <el-button @click="cancel">取消</el-button>
+            </el-form-item>
+          </el-form>
   </div>
 </template>
 <script>
+import {mapState} from "vuex";
+import axios from "axios";
+
 export default {
   name:'citiesLinkage',
   components: {},
-  props: ['cut','editRow'],
+  props: ['cut','editRow','type'],
   data() {
     return {
       address: {
@@ -159,11 +162,22 @@ export default {
       },
     }
   },
-  computed: {},
+  computed: {
+    ...mapState('userAbout',['isLogin','user'])
+  },
+
   watch: {},
   created() {},
   mounted() {
     this.$bus.$on("refreshShippAddress",()=>{
+      if(!this.editRow) {
+        this.address.name=''
+        this.address.phone=''
+        this.address.postal_code=''
+        this.address.detailed=''
+        this.address.address=[]
+        return
+      }
       this.address.name=this.editRow.consigneeName
       this.address.phone=this.editRow.phone
       this.address.postal_code=this.editRow.postalCode
@@ -172,10 +186,7 @@ export default {
       this.address.address.push(this.editRow.province)
       this.address.address.push(this.editRow.city)
       this.address.address.push(this.editRow.county)
-      this.address.address.push(this.editRow.detailed)
-
-
-      console.log(this.address.address[4])
+      this.address.address.push(this.editRow.town)
     })
 
   },
@@ -184,11 +195,73 @@ export default {
       this.$refs['shipping_address '].validate(valid => {
         if (!valid) return
         // TODO 提交表单
+        if(this.type===1){
+          this.update()
+        }else{
+          this.insert()
+        }
       })
+    },
+
+    insert(){
+      console.log("添加了收货地址记录")
+      let formData = new FormData()
+      formData.append('uId', this.user.uid)
+      formData.append('province', this.address.address[0])
+      formData.append('city', this.address.address[1])
+      formData.append('county', this.address.address[2])
+      formData.append('town', this.address.address[3])
+      formData.append('detailed', this.address.detailed)
+      formData.append('postalCode', this.address.postal_code)
+      formData.append('consigneeName', this.address.name)
+      formData.append('phone', this.address.phone)
+      let config = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+      axios.post('http://localhost:8081/ShippAddress/',formData,config).then(res=>{
+        if(res.data){
+          this.$bus.$emit("updateShippingAddress",res.data)
+        }
+      })
+      this.cut()
+      this.$bus.$emit('isEditAddress')
+    },
+    update(){
+      console.log("修改了收货地址记录")
+      let formData = new FormData()
+      formData.append('uId', this.user.uid)
+      formData.append('province', this.address.address[0])
+      formData.append('city', this.address.address[1])
+      formData.append('county', this.address.address[2])
+      formData.append('town', this.address.address[3])
+      formData.append('detailed', this.address.detailed)
+      formData.append('postalCode', this.address.postal_code)
+      formData.append('consigneeName', this.address.name)
+      formData.append('phone', this.address.phone)
+      formData.append('sId', this.editRow.sid)
+      let config = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+      axios.put('http://localhost:8081/ShippAddress/',formData,config).then(res=>{
+        if(res.data){
+          this.$bus.$emit("updateShippingAddress",res.data)
+        }
+      })
+      this.cut()
+       this.$bus.$emit('isEditAddress')
+
     },
     resetForm() {
       this.$refs['shipping_address '].resetFields()
     },
+    cancel(){
+      this.cut()
+      this.$bus.$emit('isEditAddress')
+    }
   }
 }
 

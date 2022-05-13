@@ -6,7 +6,13 @@
     <div id="hr"></div>
   </div>
   <div id="filter">
-    筛选
+<!--手机过滤-->
+   <PhoneFilter></PhoneFilter>
+<!--    衣服过滤-->
+    <clothing-filter></clothing-filter>
+    <div class="price-filter" >
+      价格区间:
+    </div>
   </div>
   <div id="context">
     <span v-for="i in count" :key="i" class="item" >
@@ -31,8 +37,11 @@
 </template>
 
 <script>
+import PhoneFilter from "@/components/currentsearch/PhoneFilter";
+import ClothingFilter from "@/components/currentsearch/ClothingFilter";
 export default {
   name: "SearchPage",
+  components: {ClothingFilter, PhoneFilter},
   props:['keyword'],
   data () {
     return {
@@ -70,17 +79,13 @@ export default {
   border: 1px solid #ededed;
 }
 #filter{
-  height: 100px;
+  height: auto;
   border: 1px solid red;
 }
 #context{
   height: auto;
   /*display: flex;*/
   /*justify-content: space-between;*/
-}
-.select{
-  background-color: #755be7;
-  color: white;
 }
 #menu{
   height: 50px;
@@ -113,7 +118,22 @@ export default {
   height: 500px;
   border: lavender 1px solid;
 }
-
+.item{
+  border-radius: 20px;
+  overflow: hidden;
+}
+.item:hover{
+   box-shadow:
+       0px 0.6px 0.8px rgba(0, 0, 0, 0.015),
+       0px 1.3px 1.7px rgba(0, 0, 0, 0.021),
+       0px 2.2px 3px rgba(0, 0, 0, 0.025),
+       0px 3.5px 4.8px rgba(0, 0, 0, 0.03),
+       0px 5.4px 7.3px rgba(0, 0, 0, 0.034),
+       0px 8.4px 11.5px rgba(0, 0, 0, 0.039),
+       0px 14px 19px rgba(0, 0, 0, 0.044),
+       0px 28px 38px rgba(0, 0, 0, 0.05);
+   color: #755be7;
+ }
 
 
 </style>

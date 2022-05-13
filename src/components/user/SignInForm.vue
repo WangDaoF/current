@@ -2,13 +2,14 @@
 <div  >
   <el-dialog
       :visible.sync="dialogVisible"
-      width="40%"
+      width="1000px"
       :show-close="false"
-      :title="typeform!==1?'登录':'注册'"
       >
 
-<LoginForm :typeform="typeform"></LoginForm>
+<!--<LoginForm :typeform="typeform"></LoginForm>-->
+<div>
 
+</div>
     <span slot="footer" class="dialog-footer">
   </span>
   </el-dialog>
@@ -16,10 +17,10 @@
 </template>
 
 <script>
-import LoginForm from "@/components/user/LoginForm";
+// import LoginForm from "@/components/user/LoginForm";
 export default {
   name: "SignInForm",
-  components: {LoginForm},
+  // components: {LoginForm},
   data() {
     return {
       dialogVisible: false,
